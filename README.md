@@ -29,9 +29,7 @@ class Point {
   mixin ToString!Point;
 }
 
-
-void main()
-{
+void main() {
         int i = 100;
         double d = 1.23456789;
         Point thePoint = Point.getSingleton();
