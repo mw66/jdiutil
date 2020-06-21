@@ -37,6 +37,8 @@ string _collectVars(ref string[] ids, string _id, bool showvar) {
   return join(vars, " ");
 }
 
+
+// from https://github.com/ShigekiKarita/stri/blob/master/source/stri.d
 auto parse(string s, bool showvar) {
 
     string fmt = s;
