@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/jdiutil
+jdiutil.so
+jdiutil.dylib
+jdiutil.dll
+jdiutil.a
+jdiutil.lib
+jdiutil-test-*
+*.exe
+*.o
+*.obj
+*.lst
