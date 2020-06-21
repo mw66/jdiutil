@@ -1,6 +1,6 @@
 # jdiutil: Just-Do-It util mixin
 
-## Some small util mixin to make (debug) life easier:
+### Some small util mixin to make (debug) life easier:
 
 * string interpolation for easy debug print: `_S` with var name; `_s` without var name
 * `ToString` will generate string with class fields content, instead of just plain pointer.
@@ -9,7 +9,7 @@
 * `AtomicCounted`, atomic counter
 
 
-## Examples:
+### Examples:
 ```
 class Point {
   // declare fields
@@ -48,7 +48,7 @@ void main()
 }
 ```
 
-# Output:
+### Output:
 ```
 print with    var name: i=100 d=1.23457 thePoint=app.Point(_x=0 _y=nan _label=default value _counter=0)
 print without var name: 100 1.23457 app.Point(_x=0 _y=nan _label=default value _counter=0)
