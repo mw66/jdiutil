@@ -9,8 +9,10 @@
 * `AtomicCounted`, atomic counter
 
 
-### Examples:
+### Examples, check [app.d](https://github.com/mingwugmail/jdiutil/blob/master/source/app.d):
 ```
+public import jdiutil;
+
 class Point {
   // declare fields
   mixin ReadOnly! (int,     "x");

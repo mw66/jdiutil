@@ -1,7 +1,7 @@
 import std.stdio;
 import std.experimental.logger;
 
-import jdiutil;
+public import jdiutil;
 
 alias logger = std.experimental.logger;
 
