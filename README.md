@@ -1,4 +1,6 @@
-# jdiutil: Just do it: some small util mixin to make (debug) life easier
+# jdiutil: Just-Do-It util mixin
+
+## Some small util mixin to make (debug) life easier:
 
 * string interpolation for easy debug print: `_S` with var name; `_s` without var name
 * `ToString` will generate string with class fields content, instead of just plain pointer.
@@ -8,7 +10,7 @@
 
 
 ## Examples:
-'''
+```
 class Point {
   // declare fields
   mixin ReadOnly! (int,     "x");
@@ -44,12 +46,12 @@ void main()
         string str = mixin(_S!"assign to string with custom format: {i; d%06.2f; thePoint}");
         writeln(str);
 }
-'''
+```
 
 # Output:
-'''
+```
 print with    var name: i=100 d=1.23457 thePoint=app.Point(_x=0 _y=nan _label=default value _counter=0)
 print without var name: 100 1.23457 app.Point(_x=0 _y=nan _label=default value _counter=0)
 2020-06-20T22:31:29.053 [info] app.d:38:main works in logger too: i=100 d=1.23457 thePoint=app.Point(_x=0 _y=nan _label=default value _counter=1)
 assign to string with custom format: i=100 d=001.23 thePoint=app.Point(_x=0 _y=nan _label=default value _counter=2)
-'''
+```
