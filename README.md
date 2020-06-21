@@ -2,6 +2,8 @@
 
 ### Some small util mixin to make (debug) life easier:
 
+Each of these mixins can be used *individually* or together in any combination:
+
 * string interpolation for easy debug print: `_S` with var name; `_s` without var name
 * `ToString` will generate string with class fields content, instead of just plain pointer.
 * `ReadOnly`, `ReadWrite` declare fields without boilerplate code
