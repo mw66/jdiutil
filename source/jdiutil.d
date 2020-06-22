@@ -183,7 +183,9 @@ template Singleton(T) {
 
     static if (!is(T == class)) {
         enum misUsage = `Mis-usage error: Singleton pattern is intended to be only applied to class! e.g. not struct.
-Please check https://en.wikipedia.org/wiki/Singleton_pattern for usage pattern.`;
+Please check https://en.wikipedia.org/wiki/Singleton_pattern for usage pattern.
+And check https://wiki.dlang.org/Low-Lock_Singleton_Pattern for this template implementation.
+`;
         pragma(msg, misUsage);
         static assert(false, misUsage);
     }
