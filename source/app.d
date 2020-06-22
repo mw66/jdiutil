@@ -22,6 +22,11 @@ class Point {
   mixin ToString!Point;
 }
 
+/* Mis-usage error: Singleton pattern is intended to be only applied to class! e.g. not struct.
+struct Foo {
+  mixin Singleton!Foo;
+}
+*/
 
 void main()
 {

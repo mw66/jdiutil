@@ -180,6 +180,14 @@ class Point {
 /* -------------------------------------------------------------------------- *\
 \* -------------------------------------------------------------------------- */
 template Singleton(T) {
+
+    static if (!is(T == class)) {
+        enum misUsage = `Mis-usage error: Singleton pattern is intended to be only applied to class! e.g. not struct.
+Please check https://en.wikipedia.org/wiki/Singleton_pattern for usage pattern.`;
+        pragma(msg, misUsage);
+        static assert(false, misUsage);
+    }
+
     private this() {}  // private, so nobody can new T()!
 
     // Cache instantiation flag in thread-local bool
