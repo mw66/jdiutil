@@ -29,19 +29,29 @@ class Point {
 
   // debug print string helper
   mixin ToString!Point;
+
+  // the Singleton only has empty {} ctor, customInit(...) can be done like this
+  Point customInit(double whatever) {
+    _y = whatever;
+    return this;
+  }
 }
 
+/* Mis-usage error: Singleton pattern is intended to be only applied to class! e.g. not struct.
+struct Foo {
+  mixin Singleton!Foo;
+}
+*/
 
-void main()
-{
+void main() {
         int i = 100;
         double d = 1.23456789;
-        Point thePoint = Point.getSingleton();
+        Point thePoint = Point.getSingleton().customInit(0.456);  // customInit(...)!
 
         // multiple vars separated by ';'
         // _S with var name; _s without var name
-        writeln(mixin(_S!"print with    var name: {i; d; thePoint}"));
-        writeln(mixin(_s!"print without var name: {i; d; thePoint}"));
+        writeln(mixin(_S!"with    var name: {i; d; thePoint}"));
+        writeln(mixin(_s!"without var name: {i; d; thePoint}"));
 
       //thePoint.x = 4;  // compile Error: x is ReadOnly
         thePoint.y = 4;  // ok
@@ -60,9 +70,9 @@ void main()
 
 ### Output:
 ```
-print with    var name: i=100 d=1.23457 thePoint=app.Point(_x=3 _y=nan _label=default value _counter=0)
-print without var name: 100 1.23457 app.Point(_x=3 _y=nan _label=default value _counter=0)
-2020-06-21T09:37:21.780 [info] app.d:40:main works in logger too: i=100 d=1.23457 thePoint=app.Point(_x=3 _y=4 _label=default value _counter=1)
+with    var name: i=100 d=1.23457 thePoint=app.Point(_x=3 _y=0.456 _label=default value _counter=0)
+without var name: 100 1.23457 app.Point(_x=3 _y=0.456 _label=default value _counter=0)
+2020-06-24T15:59:04.245 [info] app.d:50:main works in logger too: i=100 d=1.23457 thePoint=app.Point(_x=3 _y=4 _label=default value _counter=1)
 assign to string with custom format: i=100 d=001.23 thePoint=app.Point(_x=3 _y=3.14 _label=pi _counter=1)
 it's the same point: thePoint=app.Point(_x=3 _y=3.14 _label=pi _counter=2) samePoint=app.Point(_x=3 _y=3.14 _label=pi _counter=2)
 ```

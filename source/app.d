@@ -20,6 +20,12 @@ class Point {
 
   // debug print string helper
   mixin ToString!Point;
+
+  // the Singleton only has empty {} ctor, customInit(...) can be done like this
+  Point customInit(double whatever) {
+    _y = whatever;
+    return this;
+  }
 }
 
 /* Mis-usage error: Singleton pattern is intended to be only applied to class! e.g. not struct.
@@ -28,16 +34,15 @@ struct Foo {
 }
 */
 
-void main()
-{
+void main() {
         int i = 100;
         double d = 1.23456789;
-        Point thePoint = Point.getSingleton();
+        Point thePoint = Point.getSingleton().customInit(0.456);  // customInit(...)!
 
         // multiple vars separated by ';'
         // _S with var name; _s without var name
-        writeln(mixin(_S!"print with    var name: {i; d; thePoint}"));
-        writeln(mixin(_s!"print without var name: {i; d; thePoint}"));
+        writeln(mixin(_S!"with    var name: {i; d; thePoint}"));
+        writeln(mixin(_s!"without var name: {i; d; thePoint}"));
 
       //thePoint.x = 4;  // compile Error: x is ReadOnly
         thePoint.y = 4;  // ok
