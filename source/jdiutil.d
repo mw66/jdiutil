@@ -231,3 +231,20 @@ template AtomicCounted(T=long) {  // better use *signed* 64 bits, easy to detect
   T decCount() /*shared*/ {core.atomic.atomicOp!"-="(_counter, 1); return _counter;}
 }
 
+/* -------------------------------------------------------------------------- *\
+  mixin DeclImmutableString!("unit", "test");
+  // expand to:
+  immutable string UNIT = "unit";
+  immutable string TEST = "test";
+\* -------------------------------------------------------------------------- */
+mixin template DeclImmutableString(T...) {
+  static foreach(arg; T) {
+    immutable mixin("string " ~ arg.toUpper() ~" = `"~ arg ~"`;");
+  }
+}
+
+unittest {
+  mixin DeclImmutableString!("unit", "test");
+  assert(UNIT == "unit");
+  assert(TEST == "test");
+}

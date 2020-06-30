@@ -1,6 +1,6 @@
 # jdiutil: Just-Do-It util mixin
 
-### Some small util mixin to make (debug) life easier:
+### Some small util mixin to make (debug) life easier, or reducing boilerplate code:
 
 Each of these mixins can be used **individually** or together in any combination:
 
@@ -8,6 +8,7 @@ Each of these mixins can be used **individually** or together in any combination
 * `ToString` will generate string with class fields content, instead of just plain pointer.
 * `ReadOnly`, `ReadWrite` declare fields without boilerplate code
 * `Singleton`, Low-Lock Singleton Pattern <https://wiki.dlang.org/Low-Lock_Singleton_Pattern>
+* `DeclImmutableString`: declare immutable string without boilerplate code
 * `AtomicCounted`, atomic counter
 
 
@@ -77,3 +78,10 @@ assign to string with custom format: i=100 d=001.23 thePoint=app.Point(_x=3 _y=3
 it's the same point: thePoint=app.Point(_x=3 _y=3.14 _label=pi _counter=2) samePoint=app.Point(_x=3 _y=3.14 _label=pi _counter=2)
 ```
 
+#### DeclImmutableString
+```
+  mixin DeclImmutableString!("unit", "test");
+  // expand to:
+  immutable string UNIT = "unit";
+  immutable string TEST = "test";
+```
