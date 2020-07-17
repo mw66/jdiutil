@@ -240,12 +240,13 @@ template AtomicCounted(T=long) {  // better use *signed* 64 bits, easy to detect
 \* -------------------------------------------------------------------------- */
 mixin template DeclImmutableString(T...) {
   static foreach(arg; T) {
-    immutable mixin("string " ~ arg.toUpper() ~" = `"~ arg ~"`;");
+    immutable mixin("string " ~ arg.replace('.', '_').toUpper() ~" = `"~ arg ~"`;");
   }
 }
 
 unittest {
-  mixin DeclImmutableString!("unit", "test");
+  mixin DeclImmutableString!("unit", "test", "test.d");
   assert(UNIT == "unit");
   assert(TEST == "test");
+  assert(TEST_D == "test.d");
 }
