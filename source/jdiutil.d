@@ -151,8 +151,9 @@ enum ReadOnly_Decl = q{
   public  final mixin("T     " ~name~ "() { return _" ~name~ "; }");
 };
 
+// e.g. cast away shared this
 enum ReadWrite_Decl = ReadOnly_Decl ~ q{
-  public  final mixin("auto  " ~name~ "(T val)   { _" ~name~ " = val; return this; }");
+  public  final mixin("auto  " ~name~ "(T val)   { cast()_" ~name~ " = val; return this; }");
 };
 
 mixin template ReadOnly(T, string name, T value = T.init) {
