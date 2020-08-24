@@ -68,7 +68,7 @@ string _interp(string sfmt, bool showvar)() {
     return format!`format!"%s"(%-(%s, %))`(_ret.fmt, _ret.ids);
 }
 
-string _S(string sfmt)() {return _interp!(sfmt, true); }
+string _S(string sfmt)() {return _interp!(sfmt, true );}
 string _s(string sfmt)() {return _interp!(sfmt, false);}
 
 unittest
@@ -225,12 +225,16 @@ And check https://wiki.dlang.org/Low-Lock_Singleton_Pattern for this template im
 \* -------------------------------------------------------------------------- */
 template AtomicCounted(T=long) {  // better use *signed* 64 bits, easy to detect neg values
   align(size_t.sizeof) shared
-    mixin ReadOnly!(T, "counter");  // TODO: make sure no writer!
+    mixin ReadWrite!(T, "counter");  // sometimes we need the writer to set the init value!
 
  public:
   // atomicOp, is shared necessary?
-  T incCount() /*shared*/ {core.atomic.atomicOp!"+="(_counter, 1); return _counter;}
-  T decCount() /*shared*/ {core.atomic.atomicOp!"-="(_counter, 1); return _counter;}
+  T incCount() shared/**/ {core.atomic.atomicOp!"+="(_counter, 1); return _counter;}
+  T decCount() shared/**/ {core.atomic.atomicOp!"-="(_counter, 1); return _counter;}
+  /+
+  T incCount() shared/**/ {core.atomic.atomicFetchAdd(_counter, 1); return _counter;}
+  T decCount() shared/**/ {core.atomic.atomicFetchSub(_counter, 1); return _counter;}
+  +/
 }
 
 /* -------------------------------------------------------------------------- *\
