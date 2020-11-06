@@ -1,25 +1,12 @@
 import std.stdio;
 
 // https://wiki.dlang.org/Memory_Management#Explicit_Class_Instance_Allocation
+// https://forum.dlang.org/post/pqykojxbmjaiwzxcdxnh@forum.dlang.org
+// I recommend using libc's malloc and free instead of GC.malloc and GC.free.
+// Reason: you avoid increasing the GC's heap size.
+// Note that you only need to use GC.addRange if the objects you allocate themselves point to other objects.
  
-class TestClass 
-{
-    int x;
-    
-    this(int x) 
-    {
-        writeln("TestClass's constructor called");
-        this.x = x;
-    }
-    
-    ~this() 
-    {
-        writeln("TestClass's destructor called");
-    }
-}      
- 
-T heapAllocate(T, Args...) (Args args) 
-{
+T heapAlloc(T, bool notifyGC, Args...) (Args args) {
     import std.conv : emplace;
     import core.stdc.stdlib : malloc;
     import core.memory : GC;
@@ -35,18 +22,23 @@ T heapAllocate(T, Args...) (Args args)
         onOutOfMemoryError();
     }                    
     
-    writeln("Memory allocated");
+    // writeln("Memory allocated");
 
     // notify garbage collector that it should scan this memory
-    GC.addRange(memory.ptr, size);
+    static if (notifyGC) {
+      GC.addRange(memory.ptr, size);
+    }
     
     // call T's constructor and emplace instance on
     // newly allocated memory
     return emplace!(T, Args)(memory, args);                                    
 }
+
+T heapAlloc(T, Args...) (Args args) {
+  return heapAlloc!(T, false, Args)(args);
+}
  
-void heapDeallocate(T)(T obj) 
-{
+void heapFree(T, bool notifyGC)(T obj) {
     import core.stdc.stdlib : free;
     import core.memory : GC;
     
@@ -54,22 +46,48 @@ void heapDeallocate(T)(T obj)
     destroy(obj); 
 
     // garbage collector should no longer scan this memory
-    GC.removeRange(cast(void*)obj);
+    static if (notifyGC) {
+      GC.removeRange(cast(void*)obj);
+    }
     
     // free memory occupied by object
     free(cast(void*)obj);
     
-    writeln("Memory deallocated");
+    // writeln("Memory deallocated");
 }
-       
-void main() 
-{
+
+void heapFree(T)(T obj) {
+  heapFree!(T, false)(obj);
+}
+
+
+//unittest {
+  class TestClass {
+    int x;
+    
+    this(int x) 
+    {
+        writeln("TestClass's constructor called");
+        this.x = x;
+    }
+    
+    ~this() 
+    {
+        writeln("TestClass's destructor called");
+    }
+  }
+
+  void main() {
     // allocate new instance of TestClass on the heap
-    auto test = heapAllocate!TestClass(42);
+    auto test = heapAlloc!TestClass(42);
     scope(exit)
     {
-        heapDeallocate(test);    
+        heapFree(test);    
     }
     
     writefln("test.x = %s", test.x);
-}
+  }
+
+  //main();
+
+//}
