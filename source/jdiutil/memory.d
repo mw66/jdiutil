@@ -1,3 +1,5 @@
+module jdiutil.memory;
+
 import std.stdio;
 
 // https://wiki.dlang.org/Memory_Management#Explicit_Class_Instance_Allocation
@@ -61,7 +63,7 @@ void heapFree(T)(T obj) {
 }
 
 
-//unittest {
+unittest {
   class TestClass {
     int x;
     
@@ -88,6 +90,6 @@ void heapFree(T)(T obj) {
     writefln("test.x = %s", test.x);
   }
 
-  //main();
+  main();
 
-//}
+}

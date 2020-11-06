@@ -46,7 +46,7 @@ void main() {
 
       //thePoint.x = 4;  // compile Error: x is ReadOnly
         thePoint.y = 4;  // ok
-        thePoint.incCount();
+        (cast(shared)thePoint).incCount();
         logger.info(mixin(_S!"works in logger too: {i; d; thePoint}"));
 
         thePoint.y(3.14).label("pi");  // ok
@@ -54,6 +54,6 @@ void main() {
         writeln(str);
 
         Point samePoint = Point.getSingleton();
-        samePoint.incCount();
+        (cast(shared)samePoint).incCount();
         writeln(mixin(_S!"it's the same point: {thePoint; samePoint}"));
 }

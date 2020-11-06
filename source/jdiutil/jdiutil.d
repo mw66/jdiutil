@@ -1,4 +1,4 @@
-module jdiutil;
+module jdiutil.jdiutil;
 
 public static import core.atomic;
 
@@ -238,10 +238,11 @@ template AtomicCounted(T=long) {  // better use *signed* 64 bits, easy to detect
 }
 
 /* -------------------------------------------------------------------------- *\
-  mixin DeclImmutableString!("unit", "test");
+  mixin DeclImmutableString!("unit", "test", "test.d");
   // expand to:
   immutable string UNIT = "unit";
   immutable string TEST = "test";
+  immutable string TEST_D = "test.d";
 \* -------------------------------------------------------------------------- */
 mixin template DeclImmutableString(T...) {
   static foreach(arg; T) {
