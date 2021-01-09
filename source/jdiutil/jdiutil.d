@@ -68,8 +68,12 @@ string _interp(string sfmt, bool showvar)() {
     return format!`format!"%s"(%-(%s, %))`(_ret.fmt, _ret.ids);
 }
 
+
+// space separator
 string _S(string sfmt)() {return _interp!(sfmt, true );}
 string _s(string sfmt)() {return _interp!(sfmt, false);}
+
+// TODO: comma separator
 
 unittest
 {
@@ -115,6 +119,10 @@ string fieldNames(T)() if (isAggregateType!T) {
 template ToString(T) {
   override string toString() {
     return mixin(_S!(fieldNames!T));
+  }
+
+  string toStr() {  // shorter version, without var name
+    return mixin(_s!(fieldNames!T));
   }
 }
 
