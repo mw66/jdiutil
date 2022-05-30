@@ -13,3 +13,4 @@ jdiutil-test-*
 *.o
 *.obj
 *.lst
+rslib/target/
