@@ -1,9 +1,10 @@
 build:
-	cargo build
+	dub build
 
 clean:
-	cargo clean
+	cd rslib && make clean
+	dub clean
 
-init:
+init-rslib:
 	cargo new rslib --lib
 
