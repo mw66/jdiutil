@@ -28,3 +28,14 @@ class SegQueue {
     handle = segqueue_new();
   }
 }
+
+unittest {
+  {
+  SegQueue queue = new SegQueue();
+  assert(queue.handle == 0);
+  }
+  {
+  SegQueue queue = new SegQueue();
+  assert(queue.handle == 1);
+  }
+}
