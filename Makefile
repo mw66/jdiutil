@@ -1,4 +1,5 @@
 build:
+	dub test
 	dub build
 
 clean:
