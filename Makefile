@@ -6,5 +6,5 @@ clean:
 	dub clean
 
 init-rslib:
-	cargo new rslib --lib
+	echo cargo new rslib --lib  # only once!
 
