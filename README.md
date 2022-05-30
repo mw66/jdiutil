@@ -1,6 +1,6 @@
 # jdiutil: Just-Do-It util mixin
 
-### Some small util mixin to make (debug) life easier, or reducing boilerplate code:
+### Some small util mixin to make life easier, or reducing boilerplate code:
 
 Each of these mixins can be used **individually** or together in any combination:
 
@@ -12,7 +12,7 @@ Each of these mixins can be used **individually** or together in any combination
 * `AtomicCounted`, atomic counter
 
 
-### Examples, check [app.d](https://github.com/mingwugmail/jdiutil/blob/master/source/app.d):
+### Examples, check [app.d](https://github.com/mw66/jdiutil/blob/master/source/app.d):
 ```
 public import jdiutil;
 
@@ -85,3 +85,10 @@ it's the same point: thePoint=app.Point(_x=3 _y=3.14 _label=pi _counter=2) sameP
   immutable string UNIT = "unit";
   immutable string TEST = "test";
 ```
+
+## Build:
+Have to use rust nightly for cbindgen
+```
+$ rustup default nightly
+```
+
