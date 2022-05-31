@@ -1,4 +1,4 @@
-# jdiutil: Just-Do-It util mixin
+# jdiutil: Just-Do-It util lib
 
 ### Some small util mixin to make life easier, or reducing boilerplate code:
 
