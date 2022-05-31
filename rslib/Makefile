@@ -1,6 +1,6 @@
 rslib.h:
-	cbindgen --config cbindgen.toml --crate rslib --output $@
-	# dstep $@ -o $*.d
+	cbindgen --lang C --cpp-compat --config cbindgen.toml --crate rslib --output $@
+	dstep $@ -o $*.d
 
 build:
 	cargo build
