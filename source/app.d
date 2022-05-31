@@ -34,6 +34,18 @@ struct Foo {
 }
 */
 
+void testMemory() {
+	import core.stdc.stdio;
+	long n = 100 * 1000 * 1000;
+	Point[] points = new Point[n];
+	foreach (i; 0..n) {
+		points[i] = heapAlloc!Point();
+		heapFree(points[i]);
+	}
+	write("Press enter/return to continue...");
+	core.stdc.stdio.getchar();
+}
+
 void main() {
         int i = 100;
         double d = 1.23456789;
@@ -56,4 +68,6 @@ void main() {
         Point samePoint = Point.getSingleton();
         (cast(shared)samePoint).incCount();
         writeln(mixin(_S!"it's the same point: {thePoint; samePoint}"));
+
+	testMemory();
 }

@@ -7,8 +7,10 @@
 	"license": "BSL-1.0",
 	"name": "jdiutil",
 	"preBuildCommands": [
-		"cd rslib; make clean; make build; make rslib.h"
+		"cd rslib; make clean; make build"
 	],
+	"sourcePaths": ["source", "rslib"],
+	"importPaths": ["source", "rslib"],
 	"lflags-linux": [
 		"-L./rslib/target/debug/",
 		"-lrslib"
