@@ -6,6 +6,6 @@ build:
 	cargo build
 
 clean:
-	$(RM) -f rslib.h
+	$(RM) -f rslib.h rslib.d
 	cargo clean
 
