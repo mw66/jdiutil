@@ -1,6 +1,0 @@
-[parse.expand]
-crates = ["rslib"]
-
-[macro_expansion]
-bitflags = true
-
