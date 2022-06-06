@@ -7,14 +7,18 @@ import std.stdio;
 // I recommend using libc's malloc and free instead of GC.malloc and GC.free.
 // Reason: you avoid increasing the GC's heap size.
 // Note that you only need to use GC.addRange if the objects you allocate themselves point to other objects.
- 
-T heapAlloc(T, bool notifyGC, Args...) (Args args) {
+// NOTE: the return type has to be auto, for struct, will return T*, for class will return T 
+auto heapAlloc(T, bool notifyGC, Args...) (Args args) {
     import std.conv : emplace;
     import core.stdc.stdlib : malloc;
     import core.memory : GC;
     
-    // get class size of class instance in bytes
-    auto size = __traits(classInstanceSize, T);
+    static if (is(T == struct)) {
+      auto size = T.sizeof;
+    } else {
+      // get class size of class instance in bytes
+      auto size = __traits(classInstanceSize, T);
+    }
     
     // allocate memory for the object
     auto memory = malloc(size)[0..size];
@@ -36,7 +40,8 @@ T heapAlloc(T, bool notifyGC, Args...) (Args args) {
     return emplace!(T, Args)(memory, args);                                    
 }
 
-T heapAlloc(T, Args...) (Args args) {
+// NOTE: the return type has to be auto, for struct, will return T*, for class will return T 
+auto heapAlloc(T, Args...) (Args args) {
   return heapAlloc!(T, false, Args)(args);
 }
  
