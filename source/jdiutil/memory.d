@@ -98,3 +98,22 @@ unittest {
   main();
 
 }
+
+/* ========================================================================== *\
+\* ========================================================================== */
+// from: https://forum.dlang.org/post/acafsosotrjdswwuklob@forum.dlang.org
+// use the same name as array.dup https://dlang.org/spec/arrays.html
+extern (C) Object _d_newclass(TypeInfo_Class ci);
+
+T dup(T)(T obj) {  // shallowClone
+    if (obj is null)
+        return null;
+    ClassInfo ci = obj.classinfo;
+    size_t start = Object.classinfo.m_init.length;
+    size_t end = ci.m_init.length;
+    T clone = cast(T)_d_newclass(ci);
+    (cast(void*)clone)[start .. end] = (cast(void*)obj)[start .. end];
+    return clone;
+}
+
+
