@@ -11,7 +11,6 @@ import std.traits;
 import std.typecons;
 import std.uni;  // toUpper
 
-alias format = std.format.format;
 
 /* ========================================================================== *\
   string interpolation
