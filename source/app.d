@@ -19,7 +19,7 @@ class Point {
   mixin Singleton!Point;
 
   // debug print string helper
-  mixin ToString!Point;
+  mixin(GenerateToString);
 
   // the Singleton only has empty {} ctor, customInit(...) can be done like this
   Point customInit(double whatever) {
@@ -37,12 +37,13 @@ struct Foo {
 void testMemory() {
 	import core.stdc.stdio;
 	long n = 100 * 1000 * 1000;
+	writeln(mixin(_S!"test heapAlloc & heapFree {n} Point ..."));
 	Point[] points = new Point[n];
 	foreach (i; 0..n) {
 		points[i] = heapAlloc!Point();
 		heapFree(points[i]);
 	}
-	write("Press enter/return to continue...");
+	write("done! press enter/return to continue...");
 	core.stdc.stdio.getchar();
 }
 

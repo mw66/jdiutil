@@ -5,7 +5,7 @@
 Each of these mixins can be used **individually** or together in any combination:
 
 * string interpolation for easy debug print: `_S` with var name; `_s` without var name
-* `ToString` will generate string with class fields content, instead of just plain pointer.
+* `GenerateToString` will generate string with class fields content, instead of just plain pointer.
 * `ReadOnly`, `ReadWrite` declare fields without boilerplate code
 * `Singleton`, Low-Lock Singleton Pattern <https://wiki.dlang.org/Low-Lock_Singleton_Pattern>
 * `DeclImmutableString`: declare immutable string without boilerplate code
@@ -29,7 +29,7 @@ class Point {
   mixin Singleton!Point;
 
   // debug print string helper
-  mixin ToString!Point;
+  mixin(GenerateToString);
 
   // the Singleton only has empty {} ctor, customInit(...) can be done like this
   Point customInit(double whatever) {
