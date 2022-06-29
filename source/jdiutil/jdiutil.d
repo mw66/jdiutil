@@ -4,7 +4,7 @@ public static import core.atomic;
 
 import std.algorithm;
 import std.array;
-import std.format : format;
+public import std.format: format;
 import std.stdio;
 import std.string;
 import std.traits;
@@ -125,12 +125,13 @@ template ToString(T) {
   }
 }
 
+public enum string GenerateToString = q{mixin ToString!(typeof(this));};
 
 unittest {
   class Point {
     int x, y;
 
-    mixin ToString!Point;
+    mixin(GenerateToString);
   }
 
   class Point3D : Point {
