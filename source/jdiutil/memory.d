@@ -105,7 +105,7 @@ unittest {
 // use the same name as array.dup https://dlang.org/spec/arrays.html
 extern (C) Object _d_newclass(TypeInfo_Class ci);
 
-T dup(T)(T obj) {  // shallowClone
+T dup(T)(T obj) if (is(T == class)) {  // shallowClone
     if (obj is null)
         return null;
     ClassInfo ci = obj.classinfo;
