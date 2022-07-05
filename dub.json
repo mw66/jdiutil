@@ -6,6 +6,9 @@
 	"description": "Just-Do-It util mixin, some small util mixin to make life easier: string interpolation etc ...",
 	"license": "BSL-1.0",
 	"name": "jdiutil",
+	"dependencies": {
+		"fluent-asserts": "~>0.13.3"
+	},
 	"preBuildCommands": [
 	],
 	"sourcePaths": ["source"],
