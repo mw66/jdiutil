@@ -156,7 +156,9 @@ T dup(T)(T obj) if (is(T == class)) {  // shallowClone
 
 
 /* ========================================================================== *\
-  shared array or AA, can be `new`-ed on the heap, and shared between multi-threads
+   shared array or AA, can be `new`-ed on the heap, and shared between multi-threads
+
+   https://forum.dlang.org/post/xfjrizobwiidaiwylheq@forum.dlang.org
 \* ========================================================================== */
 class SharedAA(KeyT, ValT) {  // wrapper class to make the inner `aa` acts like a class object
   public ValT[KeyT] aa;
