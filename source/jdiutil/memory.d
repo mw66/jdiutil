@@ -1,7 +1,45 @@
 module jdiutil.memory;
 
+import core.memory;
+import std.experimental.logger;
 import std.stdio;
+import std.traits;
 
+version (unittest) {
+public import fluent.asserts;
+}
+
+public import jdiutil.jdiutil;
+
+alias logger = std.experimental.logger;
+
+/* ========================================================================== *\
+   GC-heap free
+\* ========================================================================== */
+// Deprecation: The `delete` keyword has been deprecated.  Use `object.destroy()` (and `core.memory.GC.free()` if applicable) instead.            
+// usually deepDelete=false to be safe, i.e shallow delete only the containers itself, (the containees are not recursively gcDelete-d)
+// if the user is sure that `obj` has neither cycle nor shared sub-object, then deepDelete=true will recursively gcDelete every thing from the root
+void gcDelete(T)(ref T obj, bool deepDelete=false) {
+
+  // TODO: for array|aa type T, shall we deep delete all the containees (of std containers array & aa) here?
+  // for user defined class types, user need to define the dtor to delete each field
+
+  // static if (is(T == class)) {  // TODO: also for pointer type
+  destroy!true(obj);  // although we are going to GC.free it, we want to initialize, so e.g. remove reference counter for sub-objects
+  // }
+
+  static if (is(T == class) || std.traits.isArray!T) {  // TODO: also for pointer type
+    core.memory.GC.free(cast(void*)obj);
+    obj = null;
+  }
+
+}
+
+
+
+/* ========================================================================== *\
+   non-GC-heap alloc and free
+\* ========================================================================== */
 // https://wiki.dlang.org/Memory_Management#Explicit_Class_Instance_Allocation
 // https://forum.dlang.org/post/pqykojxbmjaiwzxcdxnh@forum.dlang.org
 // I recommend using libc's malloc and free instead of GC.malloc and GC.free.
@@ -117,3 +155,72 @@ T dup(T)(T obj) if (is(T == class)) {  // shallowClone
 }
 
 
+/* ========================================================================== *\
+  shared array or AA, can be `new`-ed on the heap, and shared between multi-threads
+\* ========================================================================== */
+class SharedAA(KeyT, ValT) {  // wrapper class to make the inner `aa` acts like a class object
+  public ValT[KeyT] aa;
+  alias aa this;  // make the associative arrays syntax on SharedAA object to work
+
+  ~this() {
+    foreach (ref kv; aa.byKeyValue) {  // deep delete all the containee
+      gcDelete(kv.key);
+      gcDelete(kv.value);
+    }
+  }
+}
+
+// array is passed by value (e.g. as func param), to pass by reference, let's use class
+class SharedArray(T) {
+  public T[] array;
+  alias array this;  // make the array syntax on SharedArray object to work
+
+  ~this() {
+    foreach (ref item; array) {  // deep delete all the containee
+      gcDelete(item);
+    }
+    gcDelete(array);
+  }
+
+  static if (std.traits.isNumeric!(T)) {
+    enum T defaultInitValue = 0;
+  } else {
+    enum T defaultInitValue = T.init;
+  }
+
+  this(size_t n=0, T initValue=defaultInitValue) {
+    array = new T[n];
+    array[] = initValue;
+  }
+
+  inout ref inout(T) opIndex(ptrdiff_t i) {  // can have negative index
+    return (i >= 0) ?
+        array[  i] :
+        array[$+i];
+  }
+
+  @disable final:  // bug: https://forum.dlang.org/thread/pjxwebeyiypgtgxqmcdp@forum.dlang.org
+    // remove the array's range interface
+    T front();
+    void popFront();
+    bool empty();
+}
+
+
+alias SharedDoubleArray = SharedArray!double;
+alias SharedLongArray   = SharedArray!long;
+
+
+unittest {
+  auto signs = new SharedDoubleArray(3);
+  foreach (s; -1..2) {
+    signs[s] = s;
+  }
+  logger.info(mixin(_S!"{signs.array}"));
+  Assert.equal(signs[-1], -1);
+  Assert.equal(signs[ 0],  0);
+  Assert.equal(signs[ 1],  1);
+}
+
+/* ========================================================================== *\
+\* ========================================================================== */
