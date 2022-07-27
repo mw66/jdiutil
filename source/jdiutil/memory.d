@@ -6,7 +6,7 @@ import std.stdio;
 import std.traits;
 
 version (unittest) {
-public import fluent.asserts;
+import fluent.asserts;
 }
 
 public import jdiutil.jdiutil;
