@@ -32,14 +32,14 @@ string _collectVar(ref string[] ids, string _id, bool showvar) {
   return varfmt;
 }
 
-string _collectVars(ref string[] ids, string _id, bool showvar) {
+string _collectVars(ref string[] ids, string _id, bool showvar, string sep) {
   auto vars = _id.split(";").map!(id => _collectVar(ids, id, showvar));
-  return join(vars, " ");
+  return join(vars, sep);
 }
 
 
 // from https://github.com/ShigekiKarita/stri/blob/master/source/stri.d
-auto parse(string s, bool showvar) {
+auto parse(string s, bool showvar, string sep) {
 
     string fmt = s;
     string[] ids;
@@ -54,7 +54,7 @@ auto parse(string s, bool showvar) {
 
         auto quote = subs[0..$+1-ends.length]; // "${def}"
         auto _id = subs[1..$-ends.length]; // "def"
-        string varfmt = _collectVars(ids, _id, showvar);
+        string varfmt = _collectVars(ids, _id, showvar, sep);
         fmt = fmt.replace(quote, varfmt);
 
         subs = ends.find("{"); // "${i}..."
@@ -62,15 +62,15 @@ auto parse(string s, bool showvar) {
     return tuple!("ids", "fmt")(ids, fmt);
 }
 
-string _interp(string sfmt, bool showvar)() {
-    enum _ret = parse(sfmt, showvar);
+string _interp(string sfmt, bool showvar, string sep)() {
+    enum _ret = parse(sfmt, showvar, sep);
     return format!`format!"%s"(%-(%s, %))`(_ret.fmt, _ret.ids);
 }
 
 
 // space separator
-string _S(string sfmt)() {return _interp!(sfmt, true );}
-string _s(string sfmt)() {return _interp!(sfmt, false);}
+string _S(string sfmt, string sep=" ")() {return _interp!(sfmt, true , sep);}
+string _s(string sfmt, string sep=" ")() {return _interp!(sfmt, false, sep);}
 
 // TODO: comma separator
 
