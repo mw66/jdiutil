@@ -7,6 +7,8 @@ import std.experimental.logger;
 import std.stdio;
 import std.traits;
 
+import containers.hashmap; // emsi_containers
+
 version (unittest) {
 public import fluent.asserts;
 }
@@ -229,7 +231,9 @@ T dup(T)(T obj) if (is(T == class)) {  // shallowClone
    https://forum.dlang.org/post/xfjrizobwiidaiwylheq@forum.dlang.org
 \* ========================================================================== */
 class SharedAA(KeyT, ValT) {  // wrapper class to make the inner `aa` acts like a class object
-  public ValT[KeyT] aa;
+  // https://forum.dlang.org/thread/vkkwysusmnivkooglgwd@forum.dlang.org
+  // life is too short to debug dlang built-in AA to right, let's just use HashMap from emsi_containers
+  public HashMap!(KeyT, ValT) aa;
   alias aa this;  // make the associative arrays syntax on SharedAA object to work
 
   ~this() {

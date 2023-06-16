@@ -2,17 +2,37 @@
 	"authors": [
 		"mw66"
 	],
+	"configurations": [
+		{
+			"excludedSourceFiles": [],
+			"mainSourceFile": "source/app.d",
+			"name": "application",
+			"targetType": "executable"
+		},
+		{
+			"excludedSourceFiles": [
+				"source/app.d",
+				"source/app.d"
+			],
+			"name": "library",
+			"targetType": "library"
+		}
+	],
 	"copyright": "Copyright © 2020, mw66",
+	"dependencies": {
+		"fluent-asserts": "~>0.13.3",
+		"emsi_containers": "~>0.9.0"
+	},
 	"description": "Just-Do-It util mixin, some small util mixin to make life easier: string interpolation etc ...",
+	"importPaths": [
+		"source"
+	],
+	"lflags-linux": [],
 	"license": "BSL-1.0",
 	"name": "jdiutil",
-	"dependencies": {
-		"fluent-asserts": "~>0.13.3"
-	},
-	"preBuildCommands": [
+	"preBuildCommands": [],
+	"sourcePaths": [
+		"source"
 	],
-	"sourcePaths": ["source"],
-	"importPaths": ["source"],
-	"lflags-linux": [
-	]
+	"version": "1.2.1"
 }

@@ -2,6 +2,7 @@
 	"fileVersion": 1,
 	"versions": {
 		"ddmp": "0.0.1-0.dev.3",
+		"emsi_containers": "0.9.0",
 		"fluent-asserts": "0.13.3",
 		"libdparse": "0.14.0",
 		"stdx-allocator": "2.77.5"
