@@ -1,9 +1,13 @@
 module jdiutil.memory;
 
 import core.memory;
+
+import std.exception;
 import std.experimental.logger;
 import std.stdio;
 import std.traits;
+
+import containers.hashmap; // emsi_containers
 
 version (unittest) {
 public import fluent.asserts;
@@ -138,6 +142,72 @@ unittest {
 }
 
 /* ========================================================================== *\
+  object pool
+\* ========================================================================== */
+const int EACH_WAIT_MILLISECONDS = 100;
+
+// allocate an array of T at init, and recycle the object to reduce memory usage
+// TODO: add linked-list for size unbounded pool
+template Recyclable(T) {
+  static if (is(T == struct)) {
+    alias RefT = T*;
+  } else {
+    alias RefT = T;
+  }
+
+  // https://issues.dlang.org/show_bug.cgi?id=20838#c12
+  // manually take care of required 16-bytes alignment: for cas(CMPXCHG16B)
+  public align(16) shared bool taken;  // core.atomic.cas to select free one to use
+
+  static __gshared T[] pool;
+
+  static void initObjectPool(long size) {
+    pool = new T[size];  // why in actual run, we need more than numWorkerThreads?
+
+    static if (is(T == class)) {  // TODO: heapAllocN
+      foreach (i; 0 .. size) {
+        pool[i] = new T();
+      }
+    }
+  }
+
+  static RefT make(int wait=int.max) {  // how many times should wait, by default will wait
+    enforce(pool.length > 0);
+    for (;;) {
+      foreach (ref nd; pool) {  // loop on the pool array
+        if (core.atomic.cas(&(nd.taken), false, true)) {  // atomic op!
+          enforce(nd.taken);
+          static if (is(T == struct)) {
+            return &nd;
+          } else {
+            return  nd;
+          }
+        }
+      }
+
+      if (wait-- > 0) {
+        Thread.sleep(dur!("msecs")(EACH_WAIT_MILLISECONDS));
+      } else {
+        return null;
+      }
+    }
+    return null;
+  }
+
+}
+
+// release the object, and put back into the recycle bin
+void recycle(T)(T needleDev) {
+  if (needleDev is null) {
+    return;
+  }
+  bool released = (core.atomic.cas(&(needleDev.taken), true, false));  // atomic op!
+  enforce(released);
+}
+
+
+
+/* ========================================================================== *\
 \* ========================================================================== */
 // from: https://forum.dlang.org/post/acafsosotrjdswwuklob@forum.dlang.org
 // use the same name as array.dup https://dlang.org/spec/arrays.html
@@ -162,7 +232,9 @@ T dup(T)(T obj) if (is(T == class)) {  // shallowClone
    https://forum.dlang.org/post/xfjrizobwiidaiwylheq@forum.dlang.org
 \* ========================================================================== */
 class SharedAA(KeyT, ValT) {  // wrapper class to make the inner `aa` acts like a class object
-  public ValT[KeyT] aa;
+  // https://forum.dlang.org/thread/vkkwysusmnivkooglgwd@forum.dlang.org
+  // life is too short to debug dlang built-in AA to right, let's just use HashMap from emsi_containers
+  public HashMap!(KeyT, ValT) aa;
   alias aa this;  // make the associative arrays syntax on SharedAA object to work
 
   ~this() {
