@@ -141,6 +141,7 @@ unittest {
 \* ========================================================================== */
 // from: https://forum.dlang.org/post/acafsosotrjdswwuklob@forum.dlang.org
 // use the same name as array.dup https://dlang.org/spec/arrays.html
+// https://dlang.org/library/rt/lifetime/_d_newclass.html
 extern (C) Object _d_newclass(TypeInfo_Class ci);
 
 T dup(T)(T obj) if (is(T == class)) {  // shallowClone
