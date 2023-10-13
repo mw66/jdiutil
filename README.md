@@ -86,9 +86,5 @@ it's the same point: thePoint=app.Point(_x=3 _y=3.14 _label=pi _counter=2) sameP
   immutable string TEST = "test";
 ```
 
-## Build:
-Have to use rust nightly for cbindgen
-```
-$ rustup default nightly
-```
+
 
