@@ -1,4 +1,4 @@
-### D array is just a fat-pointer, pass by value
+### D array is just a fat-pointer, passed by value in function calls.
 
 ### D range, e.g. `File.byLine()` will reuse memory buffer, if you need save any (sub)string during iteration, you must use `byLineCopy()`.
 
