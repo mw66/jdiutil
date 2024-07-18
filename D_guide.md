@@ -5,3 +5,10 @@
 ### In D, if you (tail-)init a class instance variable when declare it, it is a constant, and shared among all the objects of that class. This behavior is different from C++/Java, although the syntax is the same.
 
 https://forum.dlang.org/post/dwdyrbaxeoxmgjidqlzj@forum.dlang.org
+
+### D has two options for mixins, and both of them require complete statements: Template mixin and string mixin
+
+https://forum.dlang.org/post/mailman.2080.1719938801.3719.digitalmars-d-learn@puremagic.com
+
+
+
