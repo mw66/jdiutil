@@ -10,5 +10,15 @@ https://forum.dlang.org/post/dwdyrbaxeoxmgjidqlzj@forum.dlang.org
 
 https://forum.dlang.org/post/mailman.2080.1719938801.3719.digitalmars-d-learn@puremagic.com
 
+### aa.remove(key) array.remove(index) in-consistence
 
+https://forum.dlang.org/post/warxdyxbpnbxwixgrxwm@forum.dlang.org
 
+```
+  import std.algorithm.mutation.remove;  // (*keyword*: mutation)
+
+  array = array.remove(index);  // return a new container
+
+  // v.s.
+  aa.remove(key);  // return bool (if it's removed)
+```
