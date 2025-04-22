@@ -97,12 +97,14 @@ extern(C++)
 
     interface SharedCArrayI(T)
     {
-    private:
+    @nogc:
             public:
 
         abstract ref T at(c_long) @nogc nothrow;
 
         abstract c_long size() @nogc nothrow;
+
+        abstract c_long length() @nogc nothrow;
     }
 }
 
@@ -397,6 +399,7 @@ extern(C++) {
 
 // SharedCArray with C++ linkage cannot inherit from class `SharedArray` with D linkage
 class SharedCArray(T) : SharedCArrayI!(T) {
+@nogc: // will allocated in the D side, and export to C++, so @nogc
  public:
   T[] array;
 
@@ -405,6 +408,10 @@ class SharedCArray(T) : SharedCArrayI!(T) {
   }
 
   override c_long size() @nogc nothrow {
+    return array.length;
+  }
+
+  override c_long length() @nogc nothrow {
     return array.length;
   }
 }

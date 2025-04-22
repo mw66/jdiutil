@@ -7,6 +7,7 @@
 template<class T> class SharedCArrayI {
  public:
   virtual T& at(long i) = 0;  // can have negative index
-  virtual long size() = 0;
+  virtual long size()   = 0;  // C++ convention
+  virtual long length() = 0;  // D   convention
 };
 

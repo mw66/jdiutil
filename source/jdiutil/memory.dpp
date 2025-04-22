@@ -290,6 +290,7 @@ extern(C++) {
 
 // SharedCArray with C++ linkage cannot inherit from class `SharedArray` with D linkage
 class SharedCArray(T) : SharedCArrayI!(T) {
+@nogc:  // will allocated in the D side, and export to C++, so @nogc
  public:
   T[] array;
 
@@ -298,6 +299,10 @@ class SharedCArray(T) : SharedCArrayI!(T) {
   }
 
   override c_long size() @nogc nothrow {
+    return array.length;
+  }
+
+  override c_long length() @nogc nothrow {
     return array.length;
   }
 }
