@@ -421,7 +421,8 @@ class SharedCArray(T) : SharedCArrayI!(T) {
 
 alias SharedDoubleArray = SharedArray!double;
 alias SharedLongArray = SharedArray!long;
-alias SharedCStrArray = SharedCArray!(char*); // .cstr()
+alias SharedCStrArray = SharedCArray!( char*); // .cstr()
+alias SharedCStrArrayI = SharedCArrayI!(char*); // the *interface* type
 
 
 unittest {
