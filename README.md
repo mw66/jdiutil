@@ -11,6 +11,8 @@ Each of these mixins can be used **individually** or together in any combination
 * `DeclImmutableString`: declare immutable string without boilerplate code
 * `AtomicCounted`, atomic counter
 
+### NOTE (breaking change): since ver 2.0, Singleton is a string mixin, due to
+[this problem](https://forum.dlang.org/thread/kqjzfeevrjfwqwaqikdl@forum.dlang.org).
 
 ### Examples, check [app.d](https://github.com/mw66/jdiutil/blob/master/source/app.d):
 ```
@@ -26,7 +28,7 @@ class Point {
   mixin AtomicCounted;
 
   // this is a Singleton class!
-  mixin Singleton!Point;
+  mixin(Singleton("Point"));
 
   // debug print string helper
   mixin(GenerateToString);
@@ -40,7 +42,7 @@ class Point {
 
 /* Mis-usage error: Singleton pattern is intended to be only applied to class! e.g. not struct.
 struct Foo {
-  mixin Singleton!Foo;
+  mixin(Singleton("Foo"));
 }
 */
 
