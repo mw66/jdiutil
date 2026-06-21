@@ -7,6 +7,7 @@ import std.array;
 public import std.format: format;
 import std.stdio;
 import std.string;
+import std.conv: text;
 import std.traits;
 import std.typecons;
 import std.uni;  // toUpper
@@ -189,9 +190,10 @@ class Point {
 
 /* -------------------------------------------------------------------------- *\
 \* -------------------------------------------------------------------------- */
-template Singleton(T) {
+string Singleton(string T) {
+  return text(iq{
 
-    static if (!is(T == class)) {
+    static if (!is($(T) == class)) {
         enum misUsage = `Mis-usage error: Singleton pattern is intended to be only applied to class! e.g. not struct.
 Please check https://en.wikipedia.org/wiki/Singleton_pattern for usage pattern.
 And check https://wiki.dlang.org/Low-Lock_Singleton_Pattern for this template implementation.
@@ -207,17 +209,17 @@ And check https://wiki.dlang.org/Low-Lock_Singleton_Pattern for this template im
     private static bool instantiated_;
 
     // Thread global
-    private __gshared T instance_;
+    private __gshared $(T) instance_;
 
-    static T getSingleton()
+    static $(T) getSingleton()
     {
         if (!instantiated_)
         {
-            synchronized(T.classinfo)
+            synchronized($(T).classinfo)
             {
                 if (!instance_)
                 {
-                    instance_ = new T();
+                    instance_ = new $(T)();
                 }
 
                 instantiated_ = true;
@@ -226,6 +228,7 @@ And check https://wiki.dlang.org/Low-Lock_Singleton_Pattern for this template im
 
         return instance_;
     }
+  });
 }
 
 /* -------------------------------------------------------------------------- *\

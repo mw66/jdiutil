@@ -16,7 +16,7 @@ class Point {
   mixin AtomicCounted;
 
   // this is a Singleton class!
-  mixin Singleton!Point;
+  mixin(Singleton("Point"));
 
   // debug print string helper
   mixin(GenerateToString);
@@ -26,11 +26,13 @@ class Point {
     _y = whatever;
     return this;
   }
+
+  // this() {}  // Error: constructor `app.Point.this()` conflicts with previous declaration at source/app.d(30,3)
 }
 
 /* Mis-usage error: Singleton pattern is intended to be only applied to class! e.g. not struct.
 struct Foo {
-  mixin Singleton!Foo;
+  mixin(Singleton("Foo"));
 }
 */
 
